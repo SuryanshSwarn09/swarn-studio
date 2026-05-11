@@ -1,9 +1,7 @@
 # SWARN.STUDIO // 2026
 
-### *The Digital Cinematheque & Engineering Portfolio*
+### The Digital Cinematheque & Engineering Portfolio
 
-**SWARN.STUDIO** is personal portfolio and archival space for **Suryansh Swarn**.
----
 
 ## Stack
 
@@ -16,10 +14,14 @@
 | **Content** | React-Markdown, Remark-GFM |
 
 ---
+## Changelogs
 
+12/05 - Introduced PWA, visitor counter.
+
+---
 ## Contact
 
 * **Creator**: Suryansh Swarn
-* **Site**: [swarn.studio](https://www.google.com/search?q=https://swarn.studio)
-* **GitHub**: [@SuryanshSwarn09](https://www.google.com/search?q=https://github.com/SuryanshSwarn09)
+* **Site**: [swarn.studio](https://swarn-studio.vercel.app/)
+* **GitHub**: [@SuryanshSwarn09](https://github.com/SuryanshSwarn09)
 

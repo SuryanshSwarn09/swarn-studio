@@ -20,6 +20,12 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: 'SWARN.STUDIO // 2026',
   description: 'The 2026 Portfolio of Suryansh Swarn - A Digital Cinematheque bridging software utility and visual storytelling.',
+  manifest: '/manifest.json',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
+  themeColor: '#FB460D',
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
