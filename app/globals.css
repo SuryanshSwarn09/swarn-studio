@@ -1,0 +1,55 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --color-primary: #0A0A0A;
+  --color-accent: #FB460D;
+  --color-optic-white: #FFFFFF;
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+  --font-display: var(--font-space-grotesk);
+}
+
+@layer base {
+  body {
+    /* Hide scrollbar for standard look */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  body::-webkit-scrollbar {
+    display: none;
+  }
+  
+  html, body {
+    background-color: var(--color-primary);
+    color: var(--color-optic-white);
+    overflow-x: hidden;
+  }
+
+  /* For the custom cursor */
+  @media (pointer: fine) {
+    body {
+      cursor: none;
+    }
+    a, button, [role="button"], input, select, textarea {
+      cursor: none;
+    }
+  }
+}
+
+@layer utilities {
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-neutral-800) transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #262626; /* neutral-800 */
+    border-radius: 10px;
+  }
+}
