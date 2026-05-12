@@ -16,7 +16,7 @@
 ---
 ## Changelogs
 
-12/05 - Introduced PWA, visitor counter.
+12/05 - Introduced PWA, visitor counter,projects section redo.
 
 ---
 ## Contact

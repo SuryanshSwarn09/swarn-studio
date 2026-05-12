@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowUpRight, Github, GitFork, Star, ArrowRight } from 'lucide-react';
 import { RevealText } from './reveal-text';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import Link from 'next/link';
 
 interface GithubRepo {
@@ -17,7 +15,6 @@ interface GithubRepo {
   homepage: string | null;
   topics: string[];
   language: string | null;
-  readme: string | null;
 }
 
 export function ProjectsSection() {
@@ -30,34 +27,19 @@ export function ProjectsSection() {
         const response = await fetch('https://api.github.com/users/SuryanshSwarn09/repos?sort=updated&per_page=2');
         if (response.ok) {
           const data = await response.json();
-          
-          const reposWithReadmes = await Promise.all(
-            data.map(async (repo: any) => {
-              let readme = null;
-              try {
-                const readmeRes = await fetch(`https://raw.githubusercontent.com/SuryanshSwarn09/${repo.name}/${repo.default_branch}/README.md`);
-                if (readmeRes.ok) {
-                  readme = await readmeRes.text();
-                }
-              } catch (e) {
-                console.error("Failed to fetch readme for", repo.name);
-              }
-              
-              return {
-                id: repo.id,
-                name: repo.name,
-                stargazers_count: repo.stargazers_count,
-                forks_count: repo.forks_count,
-                html_url: repo.html_url,
-                homepage: repo.homepage,
-                topics: repo.topics || [],
-                language: repo.language,
-                readme: readme,
-              };
-            })
-          );
-          
-          setRepos(reposWithReadmes);
+
+          const processedRepos = data.map((repo: any) => ({
+            id: repo.id,
+            name: repo.name,
+            stargazers_count: repo.stargazers_count,
+            forks_count: repo.forks_count,
+            html_url: repo.html_url,
+            homepage: repo.homepage,
+            topics: repo.topics || [],
+            language: repo.language,
+          }));
+
+          setRepos(processedRepos);
         }
       } catch (error) {
         console.error("Failed to fetch GitHub stats:", error);
@@ -65,7 +47,7 @@ export function ProjectsSection() {
         setLoading(false);
       }
     }
-    
+
     fetchGitHubProjects();
   }, []);
 
@@ -83,102 +65,75 @@ export function ProjectsSection() {
       </div>
 
       <div className="space-y-48">
-        
+
         {/* Dynamic Engineering Projects */}
         {loading ? (
-          <div className="animate-pulse space-y-24">
-            <div className="h-[400px] bg-neutral-900 rounded-lg border border-neutral-800" />
-            <div className="h-[400px] bg-neutral-900 rounded-lg border border-neutral-800" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="h-[400px] bg-neutral-900 rounded-lg border border-neutral-800 animate-pulse" />
+            <div className="h-[400px] bg-neutral-900 rounded-lg border border-neutral-800 animate-pulse" />
           </div>
         ) : (
-          repos.map((repo, index) => (
-            <div key={repo.id} className="relative group">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-                
-                {/* Title & Stats */}
-                <div className="lg:col-span-5 flex flex-col justify-between h-full sticky top-32">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {repos.map((repo, index) => (
+              <div key={repo.id} className="group relative bg-neutral-900/50 backdrop-blur-sm border border-neutral-800 p-8 md:p-12 hover:border-neutral-700 transition-colors rounded-lg">
+                <div className="flex flex-col h-full justify-between">
                   <div>
                     <p className="font-mono text-accent text-xs uppercase tracking-widest mb-6">
                       Featured Engineering / {String(index + 1).padStart(2, '0')}
                     </p>
-                    <h3 className="font-display text-5xl md:text-7xl font-bold uppercase tracking-tight leading-none mb-8 break-words">
+                    <h3 className="font-display text-4xl md:text-5xl font-bold uppercase tracking-tight leading-none mb-8 break-words group-hover:text-accent transition-colors">
                       {repo.name.replace(/-/g, ' ')}
                     </h3>
                   </div>
 
-                  <div className="font-mono text-sm text-neutral-400 space-y-6">
+                  <div className="font-mono text-sm text-neutral-400 space-y-8 mt-12">
                     <div className="flex gap-4 items-center">
                       <div className="flex items-center gap-2">
-                        <Star className="w-4 h-4 text-accent"/> 
+                        <Star className="w-4 h-4 text-accent" />
                         {repo.stargazers_count}
                       </div>
                       <div className="flex items-center gap-2">
-                        <GitFork className="w-4 h-4"/> 
+                        <GitFork className="w-4 h-4" />
                         {repo.forks_count}
                       </div>
                     </div>
 
                     <div className="flex flex-wrap gap-2">
                       {repo.language && (
-                        <span className="border border-neutral-800 bg-neutral-900 px-3 py-1 rounded-full uppercase tracking-widest text-[10px]">
+                        <span className="border border-neutral-800 bg-neutral-950 px-3 py-1 rounded-full uppercase tracking-widest text-[10px]">
                           {repo.language}
                         </span>
                       )}
-                      {repo.topics.map((tag) => (
+                      {repo.topics.slice(0, 5).map((tag) => (
                         <span key={tag} className="border border-neutral-800 px-3 py-1 rounded-full uppercase tracking-widest text-[10px]">
                           {tag}
                         </span>
                       ))}
                     </div>
 
-                    <div className="pt-8 border-t border-neutral-900 flex gap-8 flex-wrap">
+                    <div className="pt-8 border-t border-neutral-800 flex gap-8 flex-wrap">
                       {repo.homepage && (
                         <a href={repo.homepage} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-optic-white transition-colors uppercase tracking-widest text-xs">
-                          View Live <ArrowUpRight className="w-4 h-4"/>
+                          View Live <ArrowUpRight className="w-4 h-4" />
                         </a>
                       )}
                       <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-optic-white transition-colors uppercase tracking-widest text-xs">
-                        Source Code <Github className="w-4 h-4"/>
+                        Source Code <Github className="w-4 h-4" />
                       </a>
                     </div>
                   </div>
                 </div>
-
-                {/* Readme Content */}
-                <div className="lg:col-span-7 space-y-12">
-                  <div className="bg-neutral-900 p-8 md:p-12 font-mono text-sm text-neutral-300 leading-relaxed border border-neutral-800 relative overflow-hidden max-h-[600px] overflow-y-auto custom-scrollbar">
-                    <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
-                      <Github className="w-24 h-24" />
-                    </div>
-                    <p className="text-optic-white mb-6 uppercase tracking-widest border-b border-neutral-800 pb-4 inline-block">README.md</p>
-                    
-                    <div className="prose prose-invert prose-sm prose-neutral max-w-none prose-headings:font-display prose-headings:uppercase prose-headings:tracking-widest prose-a:text-accent prose-pre:bg-neutral-950 prose-pre:border prose-pre:border-neutral-800">
-                      {repo.readme ? (
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                          {repo.readme}
-                        </ReactMarkdown>
-                      ) : (
-                        <p className="italic text-neutral-500">No README provided for this repository.</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
               </div>
-            </div>
-          ))
+            ))}
+          </div>
         )}
 
         {!loading && repos.length > 0 && (
           <div className="flex justify-end pt-12">
-            <Link 
-              href="/projects" 
-              className="flex items-center gap-4 text-optic-white hover:text-accent transition-colors font-mono uppercase tracking-widest text-sm group"
-            >
-              View All Projects 
-              <span className="w-10 h-10 rounded-full border border-neutral-700 flex items-center justify-center group-hover:border-accent transition-colors">
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </span>
+            <Link href="/projects">
+              <button className="group group-hover:before:duration-500 group-hover:after:duration-500 after:duration-500 hover:border-rose-300 hover:before:[box-shadow:_20px_20px_20px_30px_#a21caf] duration-500 before:duration-500 hover:duration-500 underline underline-offset-2 hover:after:-right-8 hover:before:right-12 hover:before:-bottom-8 hover:before:blur hover:underline hover:underline-offset-4 origin-left hover:decoration-2 hover:text-rose-300 relative bg-neutral-800 h-16 w-64 border text-left p-3 text-gray-50 text-base font-bold rounded-lg overflow-hidden before:absolute before:w-12 before:h-12 before:content-[''] before:right-1 before:top-1 before:z-10 before:bg-violet-500 before:rounded-full before:blur-lg after:absolute after:z-10 after:w-20 after:h-20 after:content-[''] after:bg-rose-300 after:right-8 after:top-3 after:rounded-full after:blur-lg">
+                View All Projects
+              </button>
             </Link>
           </div>
         )}
@@ -188,21 +143,21 @@ export function ProjectsSection() {
           <div className="mb-20">
             <p className="font-mono text-accent text-xs uppercase tracking-widest mb-6">Featured Cinema</p>
             <h3 className="font-display text-4xl md:text-6xl font-bold uppercase tracking-tight leading-none max-w-2xl">
-              Non-Verbal <br/> Emotional Journeys
+              Non-Verbal <br /> Emotional Journeys
             </h3>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-24">
-            
+
             {/* Loop De Loop */}
             <div className="group">
               <div className="relative aspect-[4/3] bg-neutral-900 overflow-hidden border border-neutral-800 mb-8">
                 <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-primary/80 to-transparent z-10 pointer-events-none" />
-                <video 
-                  autoPlay 
-                  loop 
-                  muted 
-                  playsInline 
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
                   className="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-1000 grayscale group-hover:grayscale-0"
                   src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
                 />
@@ -222,7 +177,7 @@ export function ProjectsSection() {
                     An experimental piece exploring cyclical emotional states. Uses timeline-based compositing, brutalist cuts, and advanced motion tracking to disorient the viewer intentionally.
                   </p>
                 </div>
-                
+
                 <a href="#" className="hidden md:flex w-12 h-12 rounded-full border border-neutral-700 items-center justify-center hover:bg-optic-white hover:text-primary transition-all flex-shrink-0 mt-2">
                   <ArrowUpRight className="w-5 h-5" />
                 </a>
@@ -233,11 +188,11 @@ export function ProjectsSection() {
             <div className="group md:mt-32">
               <div className="relative aspect-[4/3] bg-neutral-900 overflow-hidden border border-neutral-800 mb-8">
                 <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-primary/80 to-transparent z-10 pointer-events-none" />
-                <video 
-                  autoPlay 
-                  loop 
-                  muted 
-                  playsInline 
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
                   className="w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-1000 grayscale group-hover:grayscale-0"
                   src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
                 />
