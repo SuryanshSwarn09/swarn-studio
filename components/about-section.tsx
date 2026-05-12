@@ -1,9 +1,12 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { RevealText } from './reveal-text';
 
 export function AboutSection() {
+  const [isExpanded, setIsExpanded] = useState(false);
   return (
     <section className="py-32 px-4 md:px-12 lg:px-24 max-w-7xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-12 border-t border-neutral-900 pt-16">
@@ -14,16 +17,48 @@ export function AboutSection() {
         </div>
 
         <div className="md:col-span-8 space-y-12">
-          <div className="font-display text-3xl md:text-5xl font-light text-neutral-200 leading-[1.1] tracking-tight space-y-8">
+          <div className="font-display text-3xl md:text-5xl font-light text-neutral-200 leading-[1.1] tracking-tight">
             <p className="block">
               I&apos;m <span className="italic">Suryansh</span>—an engineer who finds as much comfort in the rigid structure of an algorithm as in the messy, fluid nature of cinema.
             </p>
-            <p className="block text-neutral-400">
-              I am a developer focused on building scalable web solutions while exploring the theoretical frontiers of modern computing. My work bridges the gap between practical software utility and academic research, with a specialized interest in the intersection of technology and visual storytelling.
-            </p>
-            <p className="block text-xl md:text-2xl text-neutral-500 font-sans tracking-normal mt-12 pl-6 border-l border-neutral-800">
-              Currently pursuing my B.Tech in IT at Bengal College of Engineering and Technology,Durgapur Specializing in core CS concepts, C++, and frontend web development. Actively bridging theory and practice by building one comprehensive project per month.
-            </p>
+
+            <AnimatePresence initial={false}>
+              {isExpanded && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="overflow-hidden"
+                >
+                  <div className="space-y-8 pt-8">
+                    <p className="block text-neutral-400">
+                      I am a developer focused on building scalable web solutions while exploring the theoretical frontiers of modern computing. My work bridges the gap between practical software utility and academic research, with a specialized interest in the intersection of technology and visual storytelling.
+                    </p>
+                    <p className="block text-xl md:text-2xl text-neutral-500 font-sans tracking-normal mt-12 pl-6 border-l border-neutral-800">
+                      Currently pursuing my B.Tech in IT at Bengal College of Engineering and Technology,Durgapur Specializing in core CS concepts, C++, and frontend web development. Actively bridging theory and practice by building one comprehensive project per month.
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="flex items-center gap-2 font-mono text-sm uppercase tracking-widest text-accent hover:text-optic-white transition-colors mt-8 focus:outline-none"
+            >
+              {isExpanded ? (
+                <>
+                  <ChevronUp className="w-4 h-4" />
+                  Read Less
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="w-4 h-4" />
+                  Read More
+                </>
+              )}
+            </button>
           </div>
         </div>
       </div>
