@@ -28,11 +28,19 @@ export const metadata: Metadata = {
   themeColor: '#FB460D',
 };
 
+import { Navbar } from '@/components/navbar';
+import { SmoothScroll } from '@/components/smooth-scroll';
+import { CustomCursor } from '@/components/custom-cursor';
+
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} ${spaceGrotesk.variable}`}>
       <body className="font-sans antialiased selection:bg-accent selection:text-white" suppressHydrationWarning>
-        {children}
+        <SmoothScroll>
+          <CustomCursor />
+          {children}
+          <Navbar />
+        </SmoothScroll>
       </body>
     </html>
   );

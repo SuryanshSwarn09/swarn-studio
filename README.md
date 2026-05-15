@@ -15,8 +15,9 @@
 
 ---
 ## Changelogs
+`Draft 1` Introduced PWA, visitor counter, projects section redo, Cinematic Lightbox Modal, YouTube Integration.
 
-12/05 - Introduced PWA, visitor counter,projects section redo.
+`Draft 2` Navbar, respective pages.
 
 ---
 ## Contact
