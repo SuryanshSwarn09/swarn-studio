@@ -6,9 +6,9 @@ import { ImageCarousel } from '@/components/image-carousel';
 import { RevealText } from '@/components/reveal-text';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 // Generate static params for all known projects
@@ -18,8 +18,9 @@ export function generateStaticParams() {
   }));
 }
 
-export default function ProjectDetailsPage({ params }: PageProps) {
-  const project = projects.find((p) => p.slug === params.slug);
+export default async function ProjectDetailsPage({ params }: PageProps) {
+  const resolvedParams = await params;
+  const project = projects.find((p) => p.slug === resolvedParams.slug);
 
   if (!project) {
     notFound();
