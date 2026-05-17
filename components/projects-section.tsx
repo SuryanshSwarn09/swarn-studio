@@ -27,12 +27,12 @@ export function ProjectsSection() {
       <div className="space-y-48">
         
         {/* Curated Engineering Projects */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
           {projects.map((project, index) => (
-            <Link href={`/reels/${project.slug}`} key={project.id} className="group relative bg-neutral-900/40 backdrop-blur-sm border border-neutral-800 hover:border-neutral-700 transition-colors rounded-lg flex flex-col h-[400px] md:h-[450px] overflow-hidden">
+            <Link href={`/reels/${project.slug}`} key={project.id} className="group relative bg-neutral-900/40 backdrop-blur-sm border border-neutral-800 hover:border-neutral-700 transition-colors rounded-lg flex flex-col h-[500px] md:h-[600px] overflow-hidden">
               
               {/* Top Half: Carousel */}
-              <div className="h-[60%] w-full border-b border-neutral-800 relative">
+              <div className="h-[65%] w-full border-b border-neutral-800 relative">
                 <ImageCarousel images={project.mockups} />
               </div>
               
