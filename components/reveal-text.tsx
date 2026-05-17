@@ -10,17 +10,16 @@ interface RevealTextProps {
 }
 
 export function RevealText({ text, className = "", delay = 0 }: RevealTextProps) {
-  // Split at spaces for word-by-word, or character by character. 
-  // Let's do word by word for performance, or char by char if requested.
-  // The PRD mentioned "letter-by-letter as they enter the viewport" for some text.
-  const letters = Array.from(text);
+  // Split at spaces for word-by-word to vastly improve performance 
+  // over character-by-character for large blocks of text.
+  const words = text.split(" ");
 
   const containerData = {
     hidden: { opacity: 0 },
-    visible: (i = 1) => ({
+    visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.03, delayChildren: delay * 0.1 },
-    }),
+      transition: { staggerChildren: 0.02, delayChildren: delay * 0.1 },
+    },
   };
 
   const childData = {
@@ -29,18 +28,13 @@ export function RevealText({ text, className = "", delay = 0 }: RevealTextProps)
       y: 0,
       transition: {
         type: "spring" as const,
-        damping: 12,
+        damping: 15,
         stiffness: 100,
       },
     },
     hidden: {
       opacity: 0,
-      y: 20,
-      transition: {
-        type: "spring" as const,
-        damping: 12,
-        stiffness: 100,
-      },
+      y: 10,
     },
   };
 
@@ -52,15 +46,16 @@ export function RevealText({ text, className = "", delay = 0 }: RevealTextProps)
       whileInView="visible"
       viewport={{ once: true, margin: "-10%" }}
     >
-      {letters.map((letter, index) => (
-        <motion.span
-          variants={childData}
-          key={index}
-          className="inline-block"
-          style={{ whiteSpace: letter === " " ? "pre" : "normal" }}
-        >
-          {letter}
-        </motion.span>
+      {words.map((word, index) => (
+        <React.Fragment key={index}>
+          <motion.span
+            variants={childData}
+            className="inline-block"
+          >
+            {word}
+          </motion.span>
+          {index < words.length - 1 && <span> </span>}
+        </React.Fragment>
       ))}
     </motion.span>
   );

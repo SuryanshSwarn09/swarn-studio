@@ -54,7 +54,7 @@ export function AboutSidebar() {
   };
 
   return (
-    <nav className="sticky top-32 hidden lg:block">
+    <nav className="sticky top-32 hidden lg:block h-[calc(100vh-10rem)] overflow-y-auto no-scrollbar">
       <ul className="space-y-4">
         {sections.map((section) => (
           <li key={section.id}>

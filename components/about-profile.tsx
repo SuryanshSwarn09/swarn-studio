@@ -38,7 +38,7 @@ export function AboutProfile() {
             Asia/Kolkata
           </div>
           <div className="flex flex-wrap gap-2 justify-center xl:justify-start">
-            {['English', 'Hindi', 'Bengali'].map(lang => (
+            {['English', 'বাংলা', 'हिन्दी'].map(lang => (
               <span key={lang} className="px-3 py-1 rounded-full border border-white/10 text-xs text-neutral-500 bg-black/20">
                 {lang}
               </span>
